@@ -1,27 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import router from '../router';
-const inputForm = ref('')
+import { useAuthStore } from '../store/auth.js'
 
-const error = ref('')
+const authStore = useAuthStore()
+
 const list = ref([
   'Product discovery and building what matters',
   'Measuring to ensure updates are a success',
   'And much more!',
 ])
-const submit = (input) => {
-  if(inputForm.value !== '' && inputForm.value.includes('@')) {
-    router.push('/subscribing')
-  }
-   else {
-    error.value = 'Valid email required'
-  }
-
-}
-
 </script>
 <template>
-
   <div class="wrapper">
     <form class="form" @submit.prevent>
       <h1 class="form-title">Stay updated!</h1>
@@ -38,18 +27,18 @@ const submit = (input) => {
       <label class="form-label">
         <div class="flex">
           <span>Email address</span>
-          <span class="error">{{ error }}</span>
+          <span class="error">{{ authStore.error }}</span>
         </div>
-       
+
         <input
           type="email"
           placeholder="email@company.com"
-          v-model="inputForm"
-          :class="[error ? 'text-danger' : 'normally']"
+          v-model="authStore.inputForm"
+          :class="[authStore.error ? 'text-danger' : 'normally']"
         />
       </label>
-    
-      <button class="form-button" @click="submit(input)">
+
+      <button class="form-button" @click="authStore.submit">
         Subscribe to monthly newsletter
       </button>
 
